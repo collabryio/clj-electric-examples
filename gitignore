@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/clojure,intellij+all
-# Edit at https://www.toptal.com/developers/gitignore?templates=clojure,intellij+all
+# Created by https://www.toptal.com/developers/gitignore/api/clojure,intellij+all,leiningen
+# Edit at https://www.toptal.com/developers/gitignore?templates=clojure,intellij+all,leiningen
 
 ### Clojure ###
 pom.xml
@@ -105,4 +105,6 @@ fabric.properties
 !.idea/codeStyles
 !.idea/runConfigurations
 
-# End of https://www.toptal.com/developers/gitignore/api/clojure,intellij+all
+### Leiningen ###
+
+# End of https://www.toptal.com/developers/gitignore/api/clojure,intellij+all,leiningen
