@@ -1,15 +1,26 @@
 (ns electric-starter-app.main
   (:require [hyperfiddle.electric :as e]
-            [hyperfiddle.electric-dom2 :as dom]))
+            [hyperfiddle.electric-dom2 :as dom]
+            [hyperfiddle.electric-ui4 :as ui]))
 
 ;; Saving this file will automatically recompile and update in your browser
 
 (e/defn Main [ring-request]
   (e/client
     (binding [dom/node js/document.body]
-      (dom/h1 (dom/text "Hello from Electric Clojure"))
-      (dom/p (dom/text "Source code for this page is in ")
-             (dom/code (dom/text "src/electric_start_app/main.cljc")))
-      (dom/p (dom/text "Make sure you check the ")
-        (dom/a (dom/props {:href "https://electric.hyperfiddle.net/" :target "_blank"})
-          (dom/text "Electric Tutorial"))))))
+      (let [!state (atom 0)]
+        (dom/p (dom/text (e/watch !state)))
+
+        (ui/button (e/fn [] (swap! !state inc))
+                   (dom/text "+"))
+
+        (dom/br)
+        (dom/br)
+
+        (ui/button (e/fn [] (swap! !state dec))
+                   (dom/text "-"))
+        (dom/br)
+        (dom/br)
+
+        (ui/button (e/fn [] (reset! !state 0))
+                   (dom/text "reset"))))))
