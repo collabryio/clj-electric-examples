@@ -12,7 +12,7 @@
 
 (e/defn Contact []
         (e/client (dom/h1 (dom/text "Contact page"))))
-(e/defn Main []
+(e/defn Main [ring-request]
         ;;Router try
         (e/client
           (binding [dom/node js/document.body]
