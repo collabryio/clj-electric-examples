@@ -2,7 +2,8 @@
   (:require [hyperfiddle.electric :as e]
             [hyperfiddle.electric-dom2 :as dom]
             [hyperfiddle.router :as r]
-            [electric-starter-app.register-form]))
+            [electric-starter-app.register-form]
+            [electric-starter-app.admin-form]))
 
 ;;Pages
 (e/defn Goto-Register-Page []
@@ -11,7 +12,8 @@
           (electric-starter-app.register-form/RenderForm.)))
 
 (e/defn Goto-Admin-Page []
-        (e/client (dom/h1 (dom/text "Admin Page"))))
+        (e/client (dom/br))
+        (e/server (electric-starter-app.admin-form/RenderForm.)))
 (e/defn Main [ring-request]
         ;;Router try
         (e/client
