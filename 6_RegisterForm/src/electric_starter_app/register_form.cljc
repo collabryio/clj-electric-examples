@@ -4,13 +4,13 @@
             [hyperfiddle.electric-dom2 :as dom]
             [hyperfiddle.electric-ui4 :as ui4]))
 
-(def user-details (atom {:username  "",
-                         :password  "",
-                          :email  ""}))
-(defn update-user-details [new-username new-password new-email]
-  (swap! user-details assoc :username new-username)
-  (swap! user-details assoc :password new-password)
-  (swap! user-details assoc :email new-email))
+(def !user-db (atom []))
+
+(defn add-new-user [new-username new-password new-email]
+  (let [new-user {:username new-username
+                  :email new-email
+                  :password new-password}]
+    (swap! !user-db conj new-user)))
 
 
 (e/defn RenderForm []
@@ -38,7 +38,14 @@
           (dom/br)
 
           (dom/div
-            (ui4/button (e/fn [] (update-user-details (deref !temp-username) (deref !temp-password) (deref !temp-email)))
+            (ui4/button (e/fn [] (add-new-user (deref !temp-username) (deref !temp-password) (deref !temp-email)))
                         (dom/text "Register")))
+          (dom/br)
 
+          (dom/div (let [{:keys [username email password]}
+                         (last (e/watch !user-db))]
+                     (dom/text "Last added user is: "
+                               username " with password: "
+                               password " and has email: "
+                               email)))
           )))
