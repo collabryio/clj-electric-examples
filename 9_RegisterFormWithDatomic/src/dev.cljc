@@ -26,7 +26,7 @@
         "public//electric_starter_app/js/manifest.edn"})
 
      (defn -main [& args]
-       (log/info "222Starting Electric compiler and server...")
+       (log/info "Starting Electric compiler and server...")
 
        (shadow-server/start!)
        (shadow/watch :dev)
