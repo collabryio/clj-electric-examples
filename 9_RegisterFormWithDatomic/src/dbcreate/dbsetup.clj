@@ -9,9 +9,6 @@
 
   (def conn (d/connect client {:db-name "db"}))
 
-(def db (d/db conn))
-
-
 (def schema [{:db/ident :form/username
                   :db/valueType :db.type/string
                   :db/unique :db.unique/identity
@@ -28,10 +25,10 @@
 
 (d/transact conn {:tx-data [{:form/username "fxdeniz"
                              :form/email "deniz@example.com"
-                             :form/password "123456"}]})
+                             :form/password "passwrod123"}]})
 
 (d/q '[:find (pull ?e [*])
-       :where [?e :form/username "fxdeniz"]] db)
+                :where [?e :form/username _]] (d/db conn))
 
 
 
