@@ -3,15 +3,30 @@
             [hyperfiddle.electric :as e]
             [hyperfiddle.electric-dom2 :as dom]
             [hyperfiddle.electric-ui4 :as ui4]
-            [electric-starter-app.register-form :refer [!user-db]]))
+            #?(:clj [datomic.client.api :as dt])))
+
+(e/def conn)
+(e/def db)
+
+(e/defn QueryAllUsers []
+        (e/server
+          (vec
+            (flatten
+                  (dt/q '[:find (pull ?e [*]) :where [?e :form/username _]] db)))))
 
 (e/defn RenderForm []
-        (e/client
-          (dom/h4 (dom/text "User list displayed as => Username | Password | Email"))
-          (e/for-by identity [current-item (e/watch !user-db)]
-                    (dom/li (dom/text
-                              (get current-item :username)
-                              " | "
-                              (get current-item :password)
-                              " | "
-                              (get current-item :email))))))
+        (e/server
+          (binding [conn @(requiring-resolve 'dev/datomic-conn)]
+            (binding [db (dt/db conn)]
+
+              (e/client
+                (dom/h4 (dom/text "User list displayed as => Username | Password | Email"))
+                (dom/div
+                  (e/for-by identity [current-item (QueryAllUsers.)]
+                      (dom/li
+                          (dom/text
+                            (get current-item :form/username)
+                            " | "
+                            (get current-item :form/email)
+                            " | "
+                            (get current-item :form/password))))))))))
