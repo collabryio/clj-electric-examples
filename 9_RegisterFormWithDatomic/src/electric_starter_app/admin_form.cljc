@@ -20,7 +20,7 @@
             (binding [db (dt/db conn)]
 
               (e/client
-                (dom/h4 (dom/text "User list displayed as => Username | Password | Email"))
+                (dom/h4 (dom/text "User list displayed as => Username | Email | Password"))
                 (dom/div
                   (e/for-by identity [current-item (QueryAllUsers.)]
                       (dom/li

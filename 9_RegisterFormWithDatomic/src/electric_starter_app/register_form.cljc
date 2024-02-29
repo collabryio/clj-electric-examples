@@ -5,7 +5,7 @@
             [hyperfiddle.electric-ui4 :as ui4]
             #?(:clj [datomic.client.api :as dt])))
 
-(def !last-added-user (atom []))
+(def !last-added-user (atom {}))
 
 (e/def conn)
 (e/def db)
@@ -17,7 +17,8 @@
               (dt/transact conn  {:tx-data
                                   [{:form/username new-username
                                     :form/password new-password
-                                    :form/email new-email}]})))))
+                                    :form/email new-email}]
+                                 })))))
 
 
 (e/defn RenderForm []
@@ -45,15 +46,17 @@
           (dom/br)
 
           (dom/div
-            (ui4/button (e/fn [] (add-new-user.
+            (ui4/button (e/fn [] ((add-new-user.
                                    (deref !temp-username)
                                    (deref !temp-password)
-                                   (deref !temp-email)))
+                                   (deref !temp-email))
+                                  (reset! !last-added-user {:username (deref !temp-username)
+                                                            :password (deref !temp-password)
+                                                            :email (deref !temp-email)})))
                         (dom/text "Register")))
           (dom/br)
 
-          (dom/div (let [{:keys [username email password]}
-                         (last (e/watch !last-added-user))]
+          (dom/div (let [{:keys [username email password]} (e/watch !last-added-user)]
                      (dom/text "Last added user is: "
                                username " with password: "
                                password " and has email: "
