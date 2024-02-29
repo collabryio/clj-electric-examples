@@ -1,11 +1,18 @@
 (ns dev
   (:require
+    #?(:clj datomic.client.api)
+    #?(:clj datomic.client.api.async)
    electric-starter-app.main
    [hyperfiddle.electric :as e]
    #?(:clj [electric-starter-app.server-jetty :as jetty])
    #?(:clj [shadow.cljs.devtools.api :as shadow])
    #?(:clj [shadow.cljs.devtools.server :as shadow-server])
    #?(:clj [clojure.tools.logging :as log])))
+
+
+(def datomic-client)
+
+(def datomic-conn)
 
 (comment (-main)) ; repl entrypoint
 
@@ -19,7 +26,7 @@
         "public//electric_starter_app/js/manifest.edn"})
 
      (defn -main [& args]
-       (log/info "Starting Electric compiler and server...")
+       (log/info "222Starting Electric compiler and server...")
 
        (shadow-server/start!)
        (shadow/watch :dev)
@@ -31,7 +38,11 @@
                      config))
 
        (comment (.stop server))
+       (alter-var-root #'datomic-client (constantly (datomic.client.api/client {:server-type :dev-local :system "ci"})))
+       (alter-var-root #'datomic-conn (constantly (datomic.client.api/connect datomic-client {:db-name "db"})))
+       (def db (datomic.client.api.async/db datomic-conn))
        )))
+
 
 #?(:cljs ;; Client Entrypoint
    (do
